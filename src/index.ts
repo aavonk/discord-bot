@@ -1,6 +1,6 @@
 import { Client, Collection } from 'discord.js';
 import type * as Discord from 'discord.js';
-import { misno } from './commands';
+import { misno, groceriesCommands } from './commands';
 import { BaseCommand } from './commands/BaseCommand';
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -15,7 +15,7 @@ type Command = BaseCommand | undefined;
 const client: MyClient = new Client();
 client.commands = new Collection();
 
-const commandObjects = [misno];
+const commandObjects = [misno, groceriesCommands];
 
 for (let command of commandObjects) {
   client.commands.set(command.name, command);
