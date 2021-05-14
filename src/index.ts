@@ -1,6 +1,7 @@
 import { Client, Collection } from 'discord.js';
 import type * as Discord from 'discord.js';
 import { misno } from './commands';
+import { BaseCommand } from './commands/BaseCommand';
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -8,6 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
 interface MyClient extends Client {
   commands?: any;
 }
+
+type Command = BaseCommand | undefined;
 
 const client: MyClient = new Client();
 client.commands = new Collection();
@@ -26,6 +29,12 @@ client.on('message', (message: Discord.Message) => {
   if (message.content === 'ping') {
     message.reply('Pong!');
   }
+
+  const command: Command = client.commands.get(message.content);
+
+  if (!command) return;
+
+  command.exec(message);
 });
 
 client.login(process.env['TOKEN']);
