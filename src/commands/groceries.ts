@@ -119,6 +119,26 @@ export class GroceriesCommand extends BaseCommand {
     return message.concat(items.join("\n"));
   }
 
+  private showRecipeLinks(meals: Meal[], message: Discord.Message): void {
+    const hasLinks = meals.filter((item) => item.recipe);
+
+    if (!hasLinks.length) return;
+
+    const embeds: MessageEmbed[] = [];
+
+    for (let item of hasLinks) {
+      const embed = new MessageEmbed()
+        .setTitle(item.name)
+        .setColor("#57F287")
+        .setURL(item.recipe!);
+      embeds.push(embed);
+    }
+
+    embeds.forEach((embed) => {
+      message.reply(embed);
+    });
+  }
+
   exec(message: Discord.Message) {
     const isCorrectChannel = this.validateCorrectChannel(message);
 
@@ -149,6 +169,7 @@ export class GroceriesCommand extends BaseCommand {
       const ingredients = this.getIngredientList(meals);
 
       m.reply(ingredients);
+      this.showRecipeLinks(meals, m);
       return collector.stop();
     });
 
