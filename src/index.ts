@@ -3,8 +3,6 @@ import type * as Discord from "discord.js";
 import { misno, groceriesCommands } from "./commands";
 import { BaseCommand } from "./commands/BaseCommand";
 
-const test = "hi";
-
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
@@ -29,6 +27,8 @@ client.on("ready", () => {
 });
 
 client.on("message", (message: Discord.Message) => {
+  if (message.author.bot) return;
+
   if (message.content === "ping") {
     message.reply("Pong!");
   }
