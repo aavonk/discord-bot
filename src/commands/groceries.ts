@@ -1,25 +1,15 @@
 import { MessageEmbed } from "discord.js";
 import type * as Discord from "discord.js";
-import { BaseCommand } from "./BaseCommand";
+import { BaseCommand, BaseProps } from "./BaseCommand";
 import { Meal } from "../data/groceries";
-
-const CHANNEL_ID = "843898538437640192";
-
-type Success = {
-  success: boolean;
-};
-
-type ErrorMessage =
-  | { success: true; message?: never }
-  | { success: false; message: string };
-
-type SuccessOrError = Success & ErrorMessage;
+import { SuccessOrError } from "../types";
 
 export class GroceriesCommand extends BaseCommand {
   private meals: Meal[];
+  private CHANNEL_ID: string = "843898538437640192";
 
-  constructor(name: string, descripton: string, items: Meal[]) {
-    super(name, descripton);
+  constructor(props: BaseProps, items: Meal[]) {
+    super(props);
     this.meals = items;
   }
 
@@ -56,7 +46,7 @@ export class GroceriesCommand extends BaseCommand {
   private validateCorrectChannel(message: Discord.Message): boolean {
     const channel = message.channel.id;
 
-    if (channel !== CHANNEL_ID) {
+    if (channel !== this.CHANNEL_ID) {
       return false;
     }
 
